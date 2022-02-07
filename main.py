@@ -5,9 +5,7 @@ import math
 
 # FUNCTIONS
 
-def draw_point_matrix(matrix, offset_x=256, offset_y=256):
-    img = np.ones((512, 512, 3), dtype=np.uint8) * 255
-
+def draw_point_matrix(img, matrix, offset_x=256, offset_y=256):
     for i in range(-1, matrix.shape[1] - 1):
         cv2.line(img,
                  (int(matrix[0, i] + offset_x), int(matrix[1, i] + offset_y)),
@@ -15,7 +13,7 @@ def draw_point_matrix(matrix, offset_x=256, offset_y=256):
                  (0, 0, 0), 1)
 
     cv2.imshow("Display", img)
-    cv2.waitKey(0)
+    cv2.waitKey(500)
 
 
 def rotate_matrix(angle):
@@ -45,19 +43,22 @@ for i in range(0, edges):
 # PRINT
 
 temp = pentagon.copy()
+img = np.ones((512, 512, 3), dtype=np.uint8) * 255
 for i in range(5):
     temp = np.dot(rotate_matrix(10), temp)
     print("Pentagon:\n", temp)
-    draw_point_matrix(temp)
+    draw_point_matrix(img, temp)
 
 temp = pentagon.copy()
+img = np.ones((512, 512, 3), dtype=np.uint8) * 255
 for i in range(5):
     temp = np.dot(scale_matrix(1.1), temp)
     print("Pentagon:\n", temp)
-    draw_point_matrix(temp)
+    draw_point_matrix(img, temp)
 
 temp = pentagon.copy()
+img = np.ones((512, 512, 3), dtype=np.uint8) * 255
 for i in range(5):
     temp = temp + translate_matrix(32)
     print("Pentagon:\n", temp)
-    draw_point_matrix(temp)
+    draw_point_matrix(img, temp)
