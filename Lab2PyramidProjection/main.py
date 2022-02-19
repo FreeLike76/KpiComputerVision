@@ -8,7 +8,7 @@ def draw_pyramid_lines(img, pyramid, offset_left=0, offset_top=0):
     # edge color change
     pyramid.edge_brightness += 8
     # if almost white
-    if pyramid.edge_brightness >= 255 * 0.8:
+    if pyramid.edge_brightness >= 255:
         pyramid.edge_brightness = 0
 
     # bottom square
@@ -32,7 +32,6 @@ def draw_pyramid_lines(img, pyramid, offset_left=0, offset_top=0):
 pyramid = Pyramid(50, 100)
 
 # PRINT AND PLOT
-
 while True:
     img = np.ones((480, 640, 3), dtype=np.uint8) * 255
     draw_pyramid_lines(img, pyramid, offset_left=320, offset_top=240)
