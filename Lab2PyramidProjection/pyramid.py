@@ -6,7 +6,7 @@ class Pyramid:
     def __init__(self, a, h):
         self.a = a
         self.h = h
-        self.edge_brightness = 0
+        self.brightness = 0
         self.matrix = np.array([[0, 0, self.h, 0],  # H
                                 [self.a, self.a, 0, 0],  # A
                                 [-self.a, self.a, 0, 0],  # B

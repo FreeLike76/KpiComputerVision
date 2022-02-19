@@ -4,28 +4,27 @@ from pyramid import Pyramid
 
 
 # FUNCTIONS
-def draw_pyramid_lines(img, pyramid, offset_left=0, offset_top=0):
+def draw_pyramid(img, pyramid, offset_left=0, offset_top=0):
     # edge color change
-    pyramid.edge_brightness += 8
+    pyramid.brightness += 8
     # if almost white
-    if pyramid.edge_brightness >= 255:
-        pyramid.edge_brightness = 0
+    if pyramid.brightness >= 255:
+        pyramid.brightness = 0
 
-    # bottom square
-    square = pyramid.matrix[1:, :]
+    # take X, Y coord, apply offset and cast
+    matrix = (pyramid.matrix[:, :2].copy() + np.array([offset_left, offset_top])).astype(np.int32)
+
+    # split matrix
+    top = matrix[0, :]
+    matrix = matrix[1:, :]
+
     # from H to other
-    for j in range(0, square.shape[0]):
-        cv2.line(img,
-                 (int(pyramid.matrix[0, 0] + offset_left), int(pyramid.matrix[0, 1] + offset_top)),
-                 (int(square[j, 0] + offset_left), int(square[j, 1] + offset_top)),
-                 (pyramid.edge_brightness, pyramid.edge_brightness, pyramid.edge_brightness), 1)
+    for j in range(-1, matrix.shape[0] - 1):
+        poly = np.concatenate((matrix[j:j+2], [top]), axis=0)
+        cv2.fillPoly(img, [poly], (pyramid.brightness, pyramid.brightness, pyramid.brightness))
 
     # bottom square lines
-    for j in range(-1, square.shape[0] - 1):
-        cv2.line(img,
-                 (int(square[j, 0] + offset_left), int(square[j, 1] + offset_top)),
-                 (int(square[j + 1, 0] + offset_left), int(square[j + 1, 1] + offset_top)),
-                 (pyramid.edge_brightness, pyramid.edge_brightness, pyramid.edge_brightness), 1)
+    cv2.fillPoly(img, [matrix], (pyramid.brightness, pyramid.brightness, pyramid.brightness))
 
 
 # CREATE PYRAMID
@@ -34,7 +33,7 @@ pyramid = Pyramid(50, 100)
 # PRINT AND PLOT
 while True:
     img = np.ones((480, 640, 3), dtype=np.uint8) * 255
-    draw_pyramid_lines(img, pyramid, offset_left=320, offset_top=240)
+    draw_pyramid(img, pyramid, offset_left=320, offset_top=240)
     cv2.imshow("Display", img)
     key = cv2.waitKey(0)
     print(key)
@@ -46,3 +45,5 @@ while True:
         pyramid.rotate_y(1)
     if key == 122:
         pyramid.rotate_z(1)
+    if key == 114:
+        pyramid = Pyramid(50, 100)
