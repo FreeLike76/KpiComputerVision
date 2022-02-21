@@ -38,12 +38,17 @@ while True:
     key = cv2.waitKey(0)
     print(key)
     # X
-    if key == 121:
+    if key == 120:
         pyramid.rotate_x(1)
     # Y
-    if key == 120:
+    if key == 121:
         pyramid.rotate_y(1)
+    # Z
     if key == 122:
         pyramid.rotate_z(1)
+    # Reset
     if key == 114:
         pyramid = Pyramid(50, 100)
+    # End
+    if key == -1:
+        break
